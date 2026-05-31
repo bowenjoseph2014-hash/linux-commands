@@ -19,6 +19,7 @@
             --light-text: #e0e0e0;
             --code-bg: #2d2d2d;
             --accent: #ff6b6b;
+            --font-size: 16px;
         }
 
         body {
@@ -26,6 +27,26 @@
             background-color: var(--darker-bg);
             color: var(--light-text);
             line-height: 1.6;
+            font-size: var(--font-size);
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        /* Light theme */
+        body.light-theme {
+            --darker-bg: #f5f5f5;
+            --dark-bg: #ffffff;
+            --light-text: #333333;
+            --code-bg: #f0f0f0;
+        }
+
+        /* High contrast theme */
+        body.high-contrast {
+            --primary-color: #ffff00;
+            --secondary-color: #00ff00;
+            --dark-bg: #000000;
+            --darker-bg: #000000;
+            --light-text: #ffffff;
+            --code-bg: #1a1a1a;
         }
 
         /* Header & Navigation */
@@ -45,6 +66,8 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
         }
 
         .logo {
@@ -102,6 +125,168 @@
         .search-container input:focus {
             outline: none;
             background-color: rgba(255,255,255,0.3);
+        }
+
+        /* Settings Button */
+        .settings-btn {
+            background-color: rgba(255,255,255,0.3);
+            color: white;
+            border: none;
+            padding: 0.8rem 1rem;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: background-color 0.3s;
+        }
+
+        .settings-btn:hover {
+            background-color: rgba(255,255,255,0.5);
+        }
+
+        /* Settings Modal */
+        .settings-modal {
+            display: none;
+            position: fixed;
+            z-index: 2000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+            animation: fadeIn 0.3s ease;
+        }
+
+        .settings-modal.active {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .settings-content {
+            background-color: var(--dark-bg);
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.4);
+            max-width: 500px;
+            width: 90%;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        .settings-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            border-bottom: 2px solid var(--primary-color);
+            padding-bottom: 1rem;
+        }
+
+        .settings-header h2 {
+            color: var(--primary-color);
+            margin: 0;
+        }
+
+        .close-settings {
+            background: none;
+            border: none;
+            color: var(--light-text);
+            font-size: 1.5rem;
+            cursor: pointer;
+            transition: color 0.3s;
+        }
+
+        .close-settings:hover {
+            color: var(--accent);
+        }
+
+        .setting-group {
+            margin-bottom: 2rem;
+        }
+
+        .setting-group label {
+            display: block;
+            color: var(--primary-color);
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+        }
+
+        .setting-group select,
+        .setting-group input[type="range"] {
+            width: 100%;
+            padding: 0.8rem;
+            background-color: var(--code-bg);
+            border: 1px solid var(--primary-color);
+            border-radius: 5px;
+            color: var(--light-text);
+            font-size: 1rem;
+        }
+
+        .setting-group input[type="range"] {
+            padding: 0;
+            height: 8px;
+        }
+
+        .font-size-display {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 0.5rem;
+            color: #999;
+            font-size: 0.9rem;
+        }
+
+        .theme-buttons {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1rem;
+        }
+
+        .theme-btn {
+            padding: 1rem;
+            border: 2px solid transparent;
+            border-radius: 5px;
+            cursor: pointer;
+            background-color: var(--code-bg);
+            color: var(--light-text);
+            transition: all 0.3s;
+            font-weight: 500;
+        }
+
+        .theme-btn:hover {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        .theme-btn.active {
+            border-color: var(--primary-color);
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        .reset-btn {
+            width: 100%;
+            padding: 0.8rem;
+            background-color: var(--accent);
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: background-color 0.3s;
+            margin-top: 1rem;
+        }
+
+        .reset-btn:hover {
+            background-color: #ff5252;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
         }
 
         /* Main Container */
@@ -198,6 +383,10 @@
             color: #ccc;
         }
 
+        body.light-theme p {
+            color: #555;
+        }
+
         /* Code Blocks */
         pre {
             background-color: var(--code-bg);
@@ -215,6 +404,10 @@
             font-size: 0.95rem;
         }
 
+        body.light-theme pre code {
+            color: #008000;
+        }
+
         /* Inline Code */
         code {
             background-color: var(--code-bg);
@@ -223,6 +416,10 @@
             color: #00d400;
             font-family: 'Courier New', monospace;
             font-size: 0.9rem;
+        }
+
+        body.light-theme code {
+            color: #008000;
         }
 
         pre code {
@@ -241,17 +438,6 @@
 
         .installation strong {
             color: var(--secondary-color);
-        }
-
-        /* Command Output */
-        .output {
-            background-color: var(--code-bg);
-            border: 1px solid #333;
-            padding: 1rem;
-            margin: 1rem 0;
-            border-radius: 5px;
-            font-family: monospace;
-            color: #888;
         }
 
         /* Tips Box */
@@ -350,6 +536,10 @@
                 padding: 1rem;
                 font-size: 0.85rem;
             }
+
+            .theme-buttons {
+                grid-template-columns: 1fr;
+            }
         }
 
         /* Scrollbar Styling */
@@ -386,11 +576,6 @@
 
         .btn:hover {
             background-color: var(--secondary-color);
-        }
-
-        .btn-small {
-            padding: 0.5rem 1rem;
-            font-size: 0.9rem;
         }
 
         /* Copy button for code */
@@ -435,9 +620,58 @@
                 <a onclick="scrollToSection('files')">Files</a>
                 <a onclick="scrollToSection('network')">Network</a>
                 <a href="https://github.com/bowenjoseph2014-hash/linux-commands" target="_blank">GitHub</a>
+                <button class="settings-btn" onclick="openSettings()">⚙️ Settings</button>
             </nav>
         </div>
     </header>
+
+    <!-- Settings Modal -->
+    <div id="settingsModal" class="settings-modal">
+        <div class="settings-content">
+            <div class="settings-header">
+                <h2>⚙️ Settings</h2>
+                <button class="close-settings" onclick="closeSettings()">✕</button>
+            </div>
+
+            <div class="setting-group">
+                <label for="themeSelect">Theme</label>
+                <div class="theme-buttons">
+                    <button class="theme-btn active" data-theme="dark" onclick="switchTheme('dark')">🌙 Dark</button>
+                    <button class="theme-btn" data-theme="light" onclick="switchTheme('light')">☀️ Light</button>
+                    <button class="theme-btn" data-theme="high-contrast" onclick="switchTheme('high-contrast')">⚡ High Contrast</button>
+                </div>
+            </div>
+
+            <div class="setting-group">
+                <label for="fontSize">Font Size</label>
+                <input type="range" id="fontSize" min="12" max="24" value="16" oninput="changeFontSize(this.value)">
+                <div class="font-size-display">
+                    <span>Small</span>
+                    <span id="fontSizeValue">16px</span>
+                    <span>Large</span>
+                </div>
+            </div>
+
+            <div class="setting-group">
+                <label>Line Height</label>
+                <select id="lineHeight" onchange="changeLineHeight(this.value)">
+                    <option value="1.4">Compact (1.4)</option>
+                    <option value="1.6" selected>Normal (1.6)</option>
+                    <option value="1.8">Comfortable (1.8)</option>
+                    <option value="2">Spacious (2)</option>
+                </select>
+            </div>
+
+            <div class="setting-group">
+                <label>
+                    <input type="checkbox" id="syncScroll" checked> 
+                    Smooth Scroll
+                </label>
+            </div>
+
+            <button class="reset-btn" onclick="resetSettings()">Reset to Defaults</button>
+        </div>
+    </div>
 
     <!-- Main Content -->
     <main>
@@ -1036,8 +1270,7 @@ cinnamon --version</code></pre>
             <p>Linux Mint includes a graphical software manager, but you can also use:</p>
             <div class="installation">
                 <strong>Launch from terminal:</strong>
-                <pre><code>mintinstall  # Opens Software Manager
-</code></pre>
+                <pre><code>mintinstall  # Opens Software Manager</code></pre>
             </div>
 
             <h3>Linux Mint Update Manager</h3>
@@ -1188,6 +1421,68 @@ watch -n 1 'cat /proc/net/dev'</code></pre>
     </footer>
 
     <script>
+        // Settings Management
+        function openSettings() {
+            document.getElementById('settingsModal').classList.add('active');
+        }
+
+        function closeSettings() {
+            document.getElementById('settingsModal').classList.remove('active');
+        }
+
+        function switchTheme(theme) {
+            const body = document.body;
+            body.classList.remove('dark-theme', 'light-theme', 'high-contrast');
+            
+            if (theme !== 'dark') {
+                body.classList.add(theme + '-theme');
+            }
+            
+            // Update active button
+            document.querySelectorAll('.theme-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            document.querySelector(`[data-theme="${theme}"]`).classList.add('active');
+            
+            localStorage.setItem('theme', theme);
+        }
+
+        function changeFontSize(value) {
+            document.documentElement.style.setProperty('--font-size', value + 'px');
+            document.getElementById('fontSizeValue').textContent = value + 'px';
+            localStorage.setItem('fontSize', value);
+        }
+
+        function changeLineHeight(value) {
+            document.body.style.lineHeight = value;
+            localStorage.setItem('lineHeight', value);
+        }
+
+        function resetSettings() {
+            if (confirm('Reset all settings to defaults?')) {
+                localStorage.clear();
+                document.documentElement.style.setProperty('--font-size', '16px');
+                document.body.style.lineHeight = '1.6';
+                document.body.classList.remove('dark-theme', 'light-theme', 'high-contrast');
+                document.getElementById('fontSize').value = '16';
+                document.getElementById('fontSizeValue').textContent = '16px';
+                document.getElementById('lineHeight').value = '1.6';
+                document.querySelector('[data-theme="dark"]').classList.add('active');
+                closeSettings();
+            }
+        }
+
+        // Load saved settings
+        function loadSettings() {
+            const savedTheme = localStorage.getItem('theme') || 'dark';
+            const savedFontSize = localStorage.getItem('fontSize') || '16';
+            const savedLineHeight = localStorage.getItem('lineHeight') || '1.6';
+            
+            switchTheme(savedTheme);
+            changeFontSize(savedFontSize);
+            changeLineHeight(savedLineHeight);
+        }
+
         function scrollToSection(sectionId) {
             const element = document.getElementById(sectionId);
             if (element) {
@@ -1205,7 +1500,7 @@ watch -n 1 'cat /proc/net/dev'</code></pre>
                 
                 if (heading && text.includes(searchTerm)) {
                     section.style.display = '';
-                    heading.scrollIntoView({ behavior: 'smooth' });
+                    if (searchTerm) heading.scrollIntoView({ behavior: 'smooth' });
                 } else if (searchTerm && heading) {
                     section.style.display = 'none';
                 } else if (!searchTerm) {
@@ -1214,10 +1509,13 @@ watch -n 1 'cat /proc/net/dev'</code></pre>
             });
         }
 
-        // Add smooth scroll behavior
-        document.querySelectorAll('a[onclick]').forEach(link => {
-            link.style.cursor = 'pointer';
-        });
+        // Close modal when clicking outside
+        window.onclick = function(event) {
+            const modal = document.getElementById('settingsModal');
+            if (event.target === modal) {
+                closeSettings();
+            }
+        }
 
         // Copy code to clipboard functionality
         document.querySelectorAll('pre').forEach(pre => {
@@ -1235,6 +1533,9 @@ watch -n 1 'cat /proc/net/dev'</code></pre>
             };
             pre.appendChild(button);
         });
+
+        // Initialize settings on page load
+        loadSettings();
     </script>
 </body>
 </html>
