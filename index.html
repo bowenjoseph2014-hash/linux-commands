@@ -1,0 +1,998 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Linux Tips & Tricks - Arch Edition</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-color: #1793d1;
+            --secondary-color: #16a085;
+            --dark-bg: #1e1e1e;
+            --darker-bg: #121212;
+            --light-text: #e0e0e0;
+            --code-bg: #2d2d2d;
+            --accent: #ff6b6b;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--darker-bg);
+            color: var(--light-text);
+            line-height: 1.6;
+        }
+
+        /* Header & Navigation */
+        header {
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+            padding: 2rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+        }
+
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: white;
+            text-decoration: none;
+        }
+
+        .logo-icon {
+            font-size: 2rem;
+        }
+
+        nav {
+            display: flex;
+            gap: 2rem;
+            flex-wrap: wrap;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            transition: opacity 0.3s;
+            cursor: pointer;
+        }
+
+        nav a:hover {
+            opacity: 0.8;
+        }
+
+        /* Search Bar */
+        .search-container {
+            flex: 1;
+            max-width: 400px;
+            margin: 0 2rem;
+        }
+
+        .search-container input {
+            width: 100%;
+            padding: 0.8rem 1rem;
+            border: none;
+            border-radius: 5px;
+            background-color: rgba(255,255,255,0.2);
+            color: white;
+            transition: background-color 0.3s;
+        }
+
+        .search-container input::placeholder {
+            color: rgba(255,255,255,0.7);
+        }
+
+        .search-container input:focus {
+            outline: none;
+            background-color: rgba(255,255,255,0.3);
+        }
+
+        /* Main Container */
+        main {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        /* Hero Section */
+        .hero {
+            text-align: center;
+            padding: 3rem 0;
+            margin-bottom: 3rem;
+        }
+
+        .hero h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            color: #999;
+        }
+
+        /* Table of Contents */
+        .toc {
+            background-color: var(--dark-bg);
+            border-left: 4px solid var(--primary-color);
+            padding: 2rem;
+            margin-bottom: 3rem;
+            border-radius: 5px;
+        }
+
+        .toc h2 {
+            margin-bottom: 1rem;
+            color: var(--primary-color);
+        }
+
+        .toc ul {
+            list-style: none;
+        }
+
+        .toc li {
+            padding: 0.5rem 0;
+        }
+
+        .toc a {
+            color: var(--primary-color);
+            text-decoration: none;
+            transition: color 0.3s;
+            cursor: pointer;
+        }
+
+        .toc a:hover {
+            color: var(--secondary-color);
+            text-decoration: underline;
+        }
+
+        /* Section Styling */
+        section {
+            margin-bottom: 3rem;
+        }
+
+        section h2 {
+            color: var(--primary-color);
+            font-size: 2rem;
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid var(--primary-color);
+        }
+
+        section h3 {
+            color: var(--secondary-color);
+            font-size: 1.5rem;
+            margin-top: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        section h4 {
+            color: #ddd;
+            font-size: 1.1rem;
+            margin-top: 1.5rem;
+            margin-bottom: 0.8rem;
+        }
+
+        p {
+            margin-bottom: 1rem;
+            color: #ccc;
+        }
+
+        /* Code Blocks */
+        pre {
+            background-color: var(--code-bg);
+            border-left: 4px solid var(--accent);
+            padding: 1.5rem;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 1rem 0;
+            position: relative;
+        }
+
+        pre code {
+            color: #00d400;
+            font-family: 'Courier New', monospace;
+            font-size: 0.95rem;
+        }
+
+        /* Inline Code */
+        code {
+            background-color: var(--code-bg);
+            padding: 0.3rem 0.6rem;
+            border-radius: 3px;
+            color: #00d400;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+        }
+
+        pre code {
+            padding: 0;
+            background-color: transparent;
+        }
+
+        /* Installation Blocks */
+        .installation {
+            background-color: var(--dark-bg);
+            border-left: 4px solid var(--secondary-color);
+            padding: 1.5rem;
+            border-radius: 5px;
+            margin: 1rem 0;
+        }
+
+        .installation strong {
+            color: var(--secondary-color);
+        }
+
+        /* Command Output */
+        .output {
+            background-color: var(--code-bg);
+            border: 1px solid #333;
+            padding: 1rem;
+            margin: 1rem 0;
+            border-radius: 5px;
+            font-family: monospace;
+            color: #888;
+        }
+
+        /* Tips Box */
+        .tip {
+            background-color: rgba(23, 147, 209, 0.1);
+            border-left: 4px solid var(--primary-color);
+            padding: 1.5rem;
+            border-radius: 5px;
+            margin: 1.5rem 0;
+        }
+
+        .tip strong {
+            color: var(--primary-color);
+        }
+
+        /* Grid Layout for Commands */
+        .command-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
+            gap: 2rem;
+            margin: 2rem 0;
+        }
+
+        .command-card {
+            background-color: var(--dark-bg);
+            padding: 1.5rem;
+            border-radius: 5px;
+            border: 1px solid #333;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .command-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(23, 147, 209, 0.2);
+        }
+
+        .command-card h4 {
+            color: var(--primary-color);
+            margin-top: 0;
+        }
+
+        /* Footer */
+        footer {
+            background-color: var(--dark-bg);
+            padding: 2rem;
+            text-align: center;
+            border-top: 1px solid #333;
+            margin-top: 3rem;
+        }
+
+        footer p {
+            color: #888;
+            margin: 0.5rem 0;
+        }
+
+        footer a {
+            color: var(--primary-color);
+            text-decoration: none;
+        }
+
+        footer a:hover {
+            text-decoration: underline;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            nav {
+                justify-content: center;
+                gap: 1rem;
+                font-size: 0.9rem;
+            }
+
+            .search-container {
+                max-width: 100%;
+                margin: 1rem 0;
+            }
+
+            .hero h1 {
+                font-size: 2rem;
+            }
+
+            .command-grid {
+                grid-template-columns: 1fr;
+            }
+
+            section h2 {
+                font-size: 1.5rem;
+            }
+
+            pre {
+                padding: 1rem;
+                font-size: 0.85rem;
+            }
+        }
+
+        /* Scrollbar Styling */
+        ::-webkit-scrollbar {
+            width: 10px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--dark-bg);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--primary-color);
+            border-radius: 5px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--secondary-color);
+        }
+
+        /* Button Styling */
+        .btn {
+            display: inline-block;
+            background-color: var(--primary-color);
+            color: white;
+            padding: 0.8rem 1.5rem;
+            border-radius: 5px;
+            text-decoration: none;
+            transition: background-color 0.3s;
+            cursor: pointer;
+            border: none;
+            font-size: 1rem;
+        }
+
+        .btn:hover {
+            background-color: var(--secondary-color);
+        }
+
+        .btn-small {
+            padding: 0.5rem 1rem;
+            font-size: 0.9rem;
+        }
+
+        /* Copy button for code */
+        .copy-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background-color: var(--accent);
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 3px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        pre:hover .copy-btn {
+            opacity: 1;
+        }
+
+        .copy-btn:hover {
+            background-color: #ff5252;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="header-content">
+            <a href="#" class="logo">
+                <span class="logo-icon">🐧</span>
+                <span>Linux Tips & Tricks</span>
+            </a>
+            <div class="search-container">
+                <input type="text" id="searchInput" placeholder="Search commands..." onkeyup="searchContent()">
+            </div>
+            <nav>
+                <a onclick="scrollToSection('system-info')">System</a>
+                <a onclick="scrollToSection('packages')">Packages</a>
+                <a onclick="scrollToSection('files')">Files</a>
+                <a onclick="scrollToSection('network')">Network</a>
+                <a href="https://github.com/bowenjoseph2014-hash/linux-commands" target="_blank">GitHub</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main>
+        <!-- Hero Section -->
+        <section class="hero">
+            <h1>Linux Tips & Tricks</h1>
+            <p>Master essential Linux and Arch Linux commands with practical examples</p>
+        </section>
+
+        <!-- Table of Contents -->
+        <section class="toc">
+            <h2>📚 Quick Navigation</h2>
+            <ul>
+                <li><a onclick="scrollToSection('system-info')">System Information Commands</a></li>
+                <li><a onclick="scrollToSection('packages')">Package Management</a></li>
+                <li><a onclick="scrollToSection('files')">File & Directory Operations</a></li>
+                <li><a onclick="scrollToSection('performance')">System Performance</a></li>
+                <li><a onclick="scrollToSection('network')">Networking</a></li>
+                <li><a onclick="scrollToSection('utilities')">Useful Utilities</a></li>
+                <li><a onclick="scrollToSection('arch-tools')">Arch Linux Tools</a></li>
+            </ul>
+        </section>
+
+        <!-- System Information -->
+        <section id="system-info">
+            <h2>🖥️ System Information Commands</h2>
+
+            <h3>Neofetch - Display System Information with Style</h3>
+            <p>Neofetch is a command-line system information tool that displays your OS, kernel, uptime, and more with ASCII art.</p>
+            
+            <div class="installation">
+                <strong>Installation on Arch Linux:</strong>
+                <pre><code>sudo pacman -S neofetch</code></pre>
+            </div>
+
+            <div class="installation">
+                <strong>Usage:</strong>
+                <pre><code>neofetch</code></pre>
+            </div>
+
+            <p><strong>Output includes:</strong></p>
+            <ul style="margin-left: 2rem; margin-bottom: 1rem;">
+                <li>OS and kernel version</li>
+                <li>Uptime</li>
+                <li>Packages installed</li>
+                <li>Shell</li>
+                <li>Resolution and display info</li>
+                <li>CPU and GPU information</li>
+                <li>Memory usage</li>
+            </ul>
+
+            <div class="tip">
+                <strong>💡 Tip:</strong> Customize your neofetch display with <code>neofetch --help</code> to hide or show specific information.
+            </div>
+
+            <h3>uname - Unix Name</h3>
+            <p>Display system information:</p>
+            <pre><code># Show all system information
+uname -a
+
+# Show kernel release
+uname -r
+
+# Show hardware platform
+uname -m</code></pre>
+
+            <h3>hostnamectl - Control System Hostname</h3>
+            <pre><code># Display current hostname information
+hostnamectl
+
+# Set a new hostname (requires root)
+sudo hostnamectl set-hostname "new-hostname"</code></pre>
+        </section>
+
+        <!-- Package Management -->
+        <section id="packages">
+            <h2>📦 Package Management</h2>
+
+            <h3>Pacman - Arch Package Manager</h3>
+            <p>Pacman is Arch Linux's native package manager.</p>
+
+            <div class="command-grid">
+                <div class="command-card">
+                    <h4>🔄 Update Operations</h4>
+                    <pre><code># Update package database
+sudo pacman -Sy
+
+# Update all packages
+sudo pacman -Syu</code></pre>
+                </div>
+
+                <div class="command-card">
+                    <h4>📥 Install Packages</h4>
+                    <pre><code># Install a package
+sudo pacman -S package_name
+
+# Install multiple packages
+sudo pacman -S pkg1 pkg2 pkg3</code></pre>
+                </div>
+
+                <div class="command-card">
+                    <h4>🔍 Search Packages</h4>
+                    <pre><code># Search for a package
+pacman -Ss keyword
+
+# Search installed packages
+pacman -Qs keyword
+
+# Show package info
+pacman -Si package_name</code></pre>
+                </div>
+
+                <div class="command-card">
+                    <h4>🗑️ Remove Packages</h4>
+                    <pre><code># Remove a package
+sudo pacman -R package_name
+
+# Remove with dependencies
+sudo pacman -Rns package_name</code></pre>
+                </div>
+            </div>
+
+            <h3>AUR - Arch User Repository with yay</h3>
+            <p>Install packages from AUR using yay helper:</p>
+            <div class="installation">
+                <strong>Installation:</strong>
+                <pre><code>sudo pacman -S yay</code></pre>
+            </div>
+
+            <pre><code># Search AUR
+yay -Ss keyword
+
+# Install from AUR
+yay -S aur_package
+
+# Update all packages including AUR
+yay -Syu</code></pre>
+        </section>
+
+        <!-- File & Directory Operations -->
+        <section id="files">
+            <h2>📁 File & Directory Operations</h2>
+
+            <h3>Essential File Commands</h3>
+
+            <h4>ls - List Directory Contents</h4>
+            <pre><code># Basic listing
+ls
+
+# Long format with details
+ls -l
+
+# Show hidden files
+ls -la
+
+# Sort by modification time
+ls -lt
+
+# Human-readable sizes
+ls -lh
+
+# Recursive listing
+ls -R</code></pre>
+
+            <h4>mkdir - Make Directories</h4>
+            <pre><code># Create single directory
+mkdir dirname
+
+# Create nested directories
+mkdir -p /path/to/nested/directories
+
+# Create with specific permissions
+mkdir -m 755 dirname</code></pre>
+
+            <h4>cp - Copy Files</h4>
+            <pre><code># Copy file
+cp source.txt destination.txt
+
+# Copy directory recursively
+cp -r source_dir/ destination_dir/
+
+# Copy and preserve attributes
+cp -a source_dir/ destination_dir/</code></pre>
+
+            <h4>mv - Move/Rename Files</h4>
+            <pre><code># Move file to directory
+mv file.txt /path/to/directory/
+
+# Rename file
+mv oldname.txt newname.txt
+
+# Move directory
+mv old_dir/ new_dir/</code></pre>
+
+            <h4>rm - Remove Files</h4>
+            <pre><code># Remove file
+rm filename
+
+# Remove directory recursively
+rm -r directory/
+
+# Force remove
+rm -f filename
+
+# Interactive removal
+rm -i filename</code></pre>
+
+            <h4>find - Search for Files</h4>
+            <pre><code># Find by name
+find . -name "filename"
+
+# Find by type
+find . -type f  # Files only
+
+# Find by size
+find . -size +100M
+
+# Find and execute command
+find . -name "*.tmp" -exec rm {} \;</code></pre>
+        </section>
+
+        <!-- System Performance -->
+        <section id="performance">
+            <h2>⚡ System Performance</h2>
+
+            <h3>htop - Enhanced Process Monitor</h3>
+            <p>A more user-friendly alternative to top for monitoring processes.</p>
+            <div class="installation">
+                <strong>Installation:</strong>
+                <pre><code>sudo pacman -S htop</code></pre>
+            </div>
+            <pre><code>htop</code></pre>
+
+            <h3>Memory & Disk Usage</h3>
+
+            <h4>free - Display Memory Usage</h4>
+            <pre><code># Display memory in human-readable format
+free -h
+
+# Display in megabytes
+free -m
+
+# Repeat every 2 seconds
+free -h -s 2</code></pre>
+
+            <h4>df - Disk Space Usage</h4>
+            <pre><code># Show disk usage
+df -h
+
+# Show specific filesystem
+df -h /home</code></pre>
+
+            <h4>du - Directory Space Usage</h4>
+            <pre><code># Show directory size
+du -sh /path/to/directory
+
+# Top 10 largest directories
+du -sh * | sort -rh | head -10</code></pre>
+
+            <div class="tip">
+                <strong>💡 Pro Tip:</strong> Use <code>watch -n 1 'free -h'</code> to continuously monitor memory in real-time.
+            </div>
+        </section>
+
+        <!-- Networking -->
+        <section id="network">
+            <h2>🌐 Networking</h2>
+
+            <h3>ip - IP Configuration</h3>
+            <p>Modern networking configuration tool:</p>
+            <pre><code># Show all interfaces
+ip addr show
+
+# Show IP addresses only
+ip addr show | grep "inet "
+
+# Show routing table
+ip route show
+
+# Set IP address (requires root)
+sudo ip addr add 192.168.1.100/24 dev eth0</code></pre>
+
+            <h3>ping - Test Network Connectivity</h3>
+            <pre><code># Ping with default count
+ping google.com
+
+# Ping specific number of packets
+ping -c 5 google.com
+
+# Ping with timeout
+ping -w 2000 google.com</code></pre>
+
+            <h3>curl - Transfer Data with URLs</h3>
+            <pre><code># Download file
+curl https://example.com/file.txt
+
+# Save to specific filename
+curl -o filename.txt https://example.com/file.txt
+
+# Follow redirects
+curl -L https://example.com
+
+# POST request
+curl -X POST -d "data" https://example.com/api</code></pre>
+
+            <h3>wget - Download Files</h3>
+            <div class="installation">
+                <strong>Installation:</strong>
+                <pre><code>sudo pacman -S wget</code></pre>
+            </div>
+
+            <pre><code># Download file
+wget https://example.com/file.zip
+
+# Resume download
+wget -c https://example.com/largefile.iso
+
+# Download multiple files
+wget https://example.com/file1.zip https://example.com/file2.zip</code></pre>
+        </section>
+
+        <!-- Useful Utilities -->
+        <section id="utilities">
+            <h2>🛠️ Useful Utilities</h2>
+
+            <h3>grep - Search Text</h3>
+            <pre><code># Simple search
+grep "pattern" filename.txt
+
+# Case-insensitive search
+grep -i "PATTERN" filename.txt
+
+# Recursive search
+grep -r "pattern" /path/to/directory/
+
+# Show line numbers
+grep -n "pattern" filename.txt
+
+# Count matches
+grep -c "pattern" filename.txt</code></pre>
+
+            <h3>sed - Stream Editor</h3>
+            <pre><code># Replace first occurrence
+sed 's/old/new/' filename.txt
+
+# Replace all occurrences
+sed 's/old/new/g' filename.txt
+
+# Delete lines matching pattern
+sed '/pattern/d' filename.txt
+
+# Edit file in place
+sed -i 's/old/new/g' filename.txt</code></pre>
+
+            <h3>tar - Archive Files</h3>
+            <pre><code># Create gzip compressed archive
+tar -czf archive.tar.gz file1 file2 directory/
+
+# Extract gzip archive
+tar -xzf archive.tar.gz
+
+# List contents
+tar -tzf archive.tar.gz
+
+# Extract to specific directory
+tar -xzf archive.tar.gz -C /path/to/directory/</code></pre>
+
+            <h3>chmod - Change Permissions</h3>
+            <pre><code># Add execute permission
+chmod +x filename
+
+# Set specific permissions (numeric)
+chmod 755 filename    # rwxr-xr-x
+
+# Recursive change
+chmod -R 755 directory/
+
+# Common permissions:
+# 755 - Owner: rwx, Group: rx, Others: rx
+# 644 - Owner: rw, Group: r, Others: r
+# 700 - Owner: rwx, Group: none, Others: none</code></pre>
+        </section>
+
+        <!-- Arch Linux Tools -->
+        <section id="arch-tools">
+            <h2>🔧 Arch Linux Specific Tools</h2>
+
+            <h3>reflector - Arch Mirror Manager</h3>
+            <p>Optimize Arch Linux package mirrors for faster downloads:</p>
+            <div class="installation">
+                <strong>Installation:</strong>
+                <pre><code>sudo pacman -S reflector</code></pre>
+            </div>
+
+            <pre><code># Find fastest mirrors
+sudo reflector --latest 20 --sort rate --save /etc/pacman.d/mirrorlist
+
+# Find mirrors from specific country
+sudo reflector --country US --latest 10 --sort rate --save /etc/pacman.d/mirrorlist</code></pre>
+
+            <h3>systemctl - Manage System Services</h3>
+            <pre><code># Start service
+sudo systemctl start service_name
+
+# Stop service
+sudo systemctl stop service_name
+
+# Restart service
+sudo systemctl restart service_name
+
+# Enable service at boot
+sudo systemctl enable service_name
+
+# Check service status
+systemctl status service_name
+
+# List all services
+systemctl list-units --type=service</code></pre>
+
+            <h3>journalctl - View System Logs</h3>
+            <pre><code># Show recent logs
+journalctl
+
+# Show last 20 lines
+journalctl -n 20
+
+# Follow logs in real-time
+journalctl -f
+
+# Show logs for specific service
+journalctl -u service_name
+
+# Show logs since last boot
+journalctl -b</code></pre>
+
+            <h3>base-devel - Development Tools</h3>
+            <p>Essential development tools for Arch Linux:</p>
+            <div class="installation">
+                <strong>Installation:</strong>
+                <pre><code>sudo pacman -S base-devel</code></pre>
+            </div>
+            <p>Includes: gcc, make, patch, pkg-config, and more.</p>
+        </section>
+
+        <!-- Pro Tips -->
+        <section>
+            <h2>💡 Pro Tips & Tricks</h2>
+
+            <h3>Create Useful Aliases</h3>
+            <p>Add to your <code>~/.bashrc</code> or <code>~/.zshrc</code>:</p>
+            <pre><code># List with size
+alias ll='ls -lh'
+
+# System info
+alias sysinfo='neofetch'
+
+# Update system
+alias update='sudo pacman -Syu && yay -Syu'
+
+# Find large files
+alias largef='find . -type f -size +100M'
+
+# Check disk usage
+alias diskusage='du -sh * | sort -rh'</code></pre>
+
+            <h3>Quick Package Search & Install</h3>
+            <pre><code># Find and install in one command (requires fzf)
+sudo pacman -S $(pacman -Ssq keyword | fzf --multi)</code></pre>
+
+            <h3>Real-time System Monitoring</h3>
+            <pre><code># Watch disk usage
+watch -n 1 'df -h'
+
+# Watch memory usage
+watch -n 1 'free -h'
+
+# Watch network traffic
+watch -n 1 'cat /proc/net/dev'</code></pre>
+
+            <div class="tip">
+                <strong>💡 Tip:</strong> Create aliases for frequently used commands to save time and reduce typing errors.
+            </div>
+        </section>
+
+        <!-- Resources -->
+        <section>
+            <h2>📚 Resources & Links</h2>
+            <ul style="margin-left: 2rem;">
+                <li><a href="https://wiki.archlinux.org/" target="_blank" style="color: var(--primary-color);">Arch Linux Wiki</a></li>
+                <li><a href="https://archlinux.org/docs/" target="_blank" style="color: var(--primary-color);">Arch Linux Documentation</a></li>
+                <li><a href="https://man.archlinux.org/man/pacman.8" target="_blank" style="color: var(--primary-color);">Pacman Manual</a></li>
+                <li><a href="https://man.archlinux.org/man/systemd.1" target="_blank" style="color: var(--primary-color);">Systemd Manual</a></li>
+                <li><a href="https://github.com/bowenjoseph2014-hash/linux-commands" target="_blank" style="color: var(--primary-color);">GitHub Repository</a></li>
+            </ul>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <p>Linux Tips & Tricks - Arch Edition</p>
+        <p>A comprehensive guide to essential Linux and Arch commands</p>
+        <p style="margin-top: 1.5rem; font-size: 0.9rem;">
+            Created with 💚 by <a href="https://github.com/bowenjoseph2014-hash" target="_blank">@bowenjoseph2014-hash</a>
+        </p>
+        <p style="color: #666; font-size: 0.85rem;">Last Updated: 2026</p>
+    </footer>
+
+    <script>
+        function scrollToSection(sectionId) {
+            const element = document.getElementById(sectionId);
+            if (element) {
+                element.scrollIntoView({ behavior: 'smooth' });
+            }
+        }
+
+        function searchContent() {
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+            const sections = document.querySelectorAll('section');
+
+            sections.forEach(section => {
+                const text = section.textContent.toLowerCase();
+                const heading = section.querySelector('h2, h3');
+                
+                if (heading && text.includes(searchTerm)) {
+                    section.style.display = '';
+                    heading.scrollIntoView({ behavior: 'smooth' });
+                } else if (searchTerm && heading) {
+                    section.style.display = 'none';
+                } else if (!searchTerm) {
+                    section.style.display = '';
+                }
+            });
+        }
+
+        // Add smooth scroll behavior
+        document.querySelectorAll('a[onclick]').forEach(link => {
+            link.style.cursor = 'pointer';
+        });
+
+        // Copy code to clipboard functionality
+        document.querySelectorAll('pre').forEach(pre => {
+            const button = document.createElement('button');
+            button.className = 'copy-btn';
+            button.textContent = 'Copy';
+            button.onclick = function() {
+                const code = pre.querySelector('code').textContent;
+                navigator.clipboard.writeText(code).then(() => {
+                    button.textContent = 'Copied!';
+                    setTimeout(() => {
+                        button.textContent = 'Copy';
+                    }, 2000);
+                });
+            };
+            pre.appendChild(button);
+        });
+    </script>
+</body>
+</html>
