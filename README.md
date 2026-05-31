@@ -244,3 +244,5 @@ This guide helps you master essential commands to get the most out of your Arch 
 ---
 
 Happy Linux hacking! 🚀
+
+**[i see you Bowen.](https://bowenjoseph2014-hash.github.io/linux-commands/me)**
