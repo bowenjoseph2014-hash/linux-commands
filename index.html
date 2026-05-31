@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Linux Tips & Tricks - Arch Edition</title>
+    <title>Linux Tips & Tricks - Multi-Distro Edition</title>
     <style>
         * {
             margin: 0;
@@ -444,7 +444,7 @@
         <!-- Hero Section -->
         <section class="hero">
             <h1>Linux Tips & Tricks</h1>
-            <p>Master essential Linux and Arch Linux commands with practical examples</p>
+            <p>Master essential Linux commands across Arch, SteamOS, and Linux Mint distributions</p>
         </section>
 
         <!-- Table of Contents -->
@@ -458,6 +458,8 @@
                 <li><a onclick="scrollToSection('network')">Networking</a></li>
                 <li><a onclick="scrollToSection('utilities')">Useful Utilities</a></li>
                 <li><a onclick="scrollToSection('arch-tools')">Arch Linux Tools</a></li>
+                <li><a onclick="scrollToSection('steamos-tools')">SteamOS Tools</a></li>
+                <li><a onclick="scrollToSection('mint-tools')">Linux Mint Tools</a></li>
             </ul>
         </section>
 
@@ -470,6 +472,16 @@
             
             <div class="installation">
                 <strong>Installation on Arch Linux:</strong>
+                <pre><code>sudo pacman -S neofetch</code></pre>
+            </div>
+
+            <div class="installation">
+                <strong>Installation on Linux Mint:</strong>
+                <pre><code>sudo apt install neofetch</code></pre>
+            </div>
+
+            <div class="installation">
+                <strong>Installation on SteamOS:</strong>
                 <pre><code>sudo pacman -S neofetch</code></pre>
             </div>
 
@@ -517,7 +529,7 @@ sudo hostnamectl set-hostname "new-hostname"</code></pre>
             <h2>📦 Package Management</h2>
 
             <h3>Pacman - Arch Package Manager</h3>
-            <p>Pacman is Arch Linux's native package manager.</p>
+            <p>Pacman is Arch Linux's native package manager. Also used in SteamOS (HoloOS) and Arch-based systems.</p>
 
             <div class="command-grid">
                 <div class="command-card">
@@ -561,7 +573,7 @@ sudo pacman -Rns package_name</code></pre>
             </div>
 
             <h3>AUR - Arch User Repository with yay</h3>
-            <p>Install packages from AUR using yay helper:</p>
+            <p>Install packages from AUR using yay helper (Arch and SteamOS):</p>
             <div class="installation">
                 <strong>Installation:</strong>
                 <pre><code>sudo pacman -S yay</code></pre>
@@ -575,6 +587,56 @@ yay -S aur_package
 
 # Update all packages including AUR
 yay -Syu</code></pre>
+
+            <h3>APT - Debian/Ubuntu Package Manager</h3>
+            <p>APT is used in Linux Mint and other Debian-based systems:</p>
+
+            <div class="command-grid">
+                <div class="command-card">
+                    <h4>🔄 Update Operations</h4>
+                    <pre><code># Update package list
+sudo apt update
+
+# Upgrade all packages
+sudo apt upgrade
+
+# Full upgrade (dist-upgrade)
+sudo apt full-upgrade</code></pre>
+                </div>
+
+                <div class="command-card">
+                    <h4>📥 Install Packages</h4>
+                    <pre><code># Install a package
+sudo apt install package_name
+
+# Install multiple packages
+sudo apt install pkg1 pkg2 pkg3</code></pre>
+                </div>
+
+                <div class="command-card">
+                    <h4>🔍 Search Packages</h4>
+                    <pre><code># Search for a package
+apt search keyword
+
+# Show package info
+apt show package_name
+
+# List available versions
+apt-cache policy package_name</code></pre>
+                </div>
+
+                <div class="command-card">
+                    <h4>🗑️ Remove Packages</h4>
+                    <pre><code># Remove a package
+sudo apt remove package_name
+
+# Remove with config files
+sudo apt purge package_name
+
+# Auto-remove unused dependencies
+sudo apt autoremove</code></pre>
+                </div>
+            </div>
         </section>
 
         <!-- File & Directory Operations -->
@@ -667,7 +729,8 @@ find . -name "*.tmp" -exec rm {} \;</code></pre>
             <p>A more user-friendly alternative to top for monitoring processes.</p>
             <div class="installation">
                 <strong>Installation:</strong>
-                <pre><code>sudo pacman -S htop</code></pre>
+                <pre><code>sudo pacman -S htop  # Arch/SteamOS
+sudo apt install htop  # Mint</code></pre>
             </div>
             <pre><code>htop</code></pre>
 
@@ -746,7 +809,8 @@ curl -X POST -d "data" https://example.com/api</code></pre>
             <h3>wget - Download Files</h3>
             <div class="installation">
                 <strong>Installation:</strong>
-                <pre><code>sudo pacman -S wget</code></pre>
+                <pre><code>sudo pacman -S wget  # Arch/SteamOS
+sudo apt install wget  # Mint</code></pre>
             </div>
 
             <pre><code># Download file
@@ -882,9 +946,179 @@ journalctl -b</code></pre>
             <p>Includes: gcc, make, patch, pkg-config, and more.</p>
         </section>
 
+        <!-- SteamOS Tools -->
+        <section id="steamos-tools">
+            <h2>🎮 SteamOS Tools & Commands</h2>
+
+            <h3>About SteamOS</h3>
+            <p>SteamOS (HoloOS) is an Arch-based Linux distribution designed for gaming on Steam Deck and desktop. It inherits Arch's pacman package manager while being optimized for gaming.</p>
+
+            <h3>Proton - Game Compatibility Layer</h3>
+            <p>Proton is a tool that allows Windows games to run on Linux through Steam.</p>
+            <pre><code># List available Proton versions
+proton --version
+
+# Check Proton installation location
+find ~/.steam/root -name "Proton*" -type d
+
+# Run a game with specific Proton version
+PROTON_VERSION="experimental" steam steam://rungameid/GAMEID</code></pre>
+
+            <h3>Flatpak - Application Management</h3>
+            <p>Flatpak is a universal package format available on SteamOS:</p>
+            <div class="installation">
+                <strong>Installation:</strong>
+                <pre><code>sudo pacman -S flatpak</code></pre>
+            </div>
+
+            <pre><code># Install a flatpak application
+flatpak install flathub com.example.app
+
+# Run a flatpak application
+flatpak run com.example.app
+
+# List installed flatpaks
+flatpak list
+
+# Update all flatpaks
+flatpak update</code></pre>
+
+            <h3>Steam Deck Specific Commands</h3>
+            <pre><code># Check battery status
+cat /sys/class/power_supply/BAT1/capacity
+
+# Check Steam Deck model
+cat /proc/device-tree/model
+
+# Access Deck UI (if on desktop mode)
+steamos-gamemode
+
+# Disable GPU turbo (for lower power consumption)
+echo 0 | sudo tee /sys/devices/system/cpu/cpu0/cpufreq/boost</code></pre>
+
+            <h3>SteamOS Package Management</h3>
+            <pre><code># Update system (SteamOS)
+sudo pacman -Syu
+
+# Install from official repositories
+sudo pacman -S package_name
+
+# Search for packages
+pacman -Ss keyword
+
+# Create pacman hook directory
+mkdir -p ~/.local/share/hooks</code></pre>
+
+            <div class="tip">
+                <strong>💡 Tip:</strong> On Steam Deck, press the power button for a few seconds and select "Switch to Desktop" to access a traditional Linux desktop environment.
+            </div>
+        </section>
+
+        <!-- Linux Mint Tools -->
+        <section id="mint-tools">
+            <h2>🌿 Linux Mint Tools & Commands</h2>
+
+            <h3>About Linux Mint</h3>
+            <p>Linux Mint is a Debian/Ubuntu-based distribution known for its user-friendly interface and stability. It uses APT for package management.</p>
+
+            <h3>Cinnamon Desktop Environment</h3>
+            <p>Mint's default desktop environment:</p>
+            <pre><code># Restart Cinnamon (if frozen)
+killall cinnamon && cinnamon &
+
+# List installed Cinnamon extensions
+cinnamon-extension-tool -l
+
+# Check Cinnamon version
+cinnamon --version</code></pre>
+
+            <h3>Software Manager - GUI Package Management</h3>
+            <p>Linux Mint includes a graphical software manager, but you can also use:</p>
+            <div class="installation">
+                <strong>Launch from terminal:</strong>
+                <pre><code>mintinstall  # Opens Software Manager
+</code></pre>
+            </div>
+
+            <h3>Linux Mint Update Manager</h3>
+            <pre><code># Check for updates
+sudo apt update && sudo apt upgrade
+
+# Launch update manager GUI
+sudo xdg-open /usr/bin/mintsystem &
+
+# Auto-install critical security updates
+sudo apt install unattended-upgrades</code></pre>
+
+            <h3>Snaps - Alternative Package Format</h3>
+            <p>Linux Mint supports Snap packages (optional install):</p>
+            <pre><code># Install snapd
+sudo apt install snapd
+
+# Install a snap application
+sudo snap install application_name
+
+# List installed snaps
+snap list
+
+# Update all snaps
+sudo snap refresh
+
+# Remove a snap
+sudo snap remove application_name</code></pre>
+
+            <h3>PPA - Personal Package Archives</h3>
+            <p>Add additional software repositories:</p>
+            <pre><code># Add a PPA
+sudo add-apt-repository ppa:username/ppa-name
+
+# Remove a PPA
+sudo add-apt-repository --remove ppa:username/ppa-name
+
+# List all PPAs
+grep -r "^deb.*ppa:" /etc/apt/sources.list*
+
+# Refresh package list after adding PPA
+sudo apt update</code></pre>
+
+            <h3>Timeshift - System Backup & Restore</h3>
+            <p>Linux Mint includes Timeshift for system snapshots:</p>
+            <pre><code># Create a system snapshot (GUI)
+sudo timeshift-gtk
+
+# Create snapshot via terminal
+sudo timeshift --create --comments "System backup"
+
+# List snapshots
+sudo timeshift --list
+
+# Restore from snapshot
+sudo timeshift --restore</code></pre>
+
+            <h3>Keyboard Shortcuts in Mint</h3>
+            <pre><code># Super key opens menu
+Super / Windows key
+
+# Open run dialog
+Alt + F2
+
+# Show/hide desktop
+Super + D
+
+# Lock screen
+Super + L
+
+# Switch between workspaces
+Ctrl + Alt + Arrow Keys</code></pre>
+
+            <div class="tip">
+                <strong>💡 Tip:</strong> Linux Mint is beginner-friendly! Check Settings → System Settings for easy access to display, keyboard, and theme customization.
+            </div>
+        </section>
+
         <!-- Pro Tips -->
         <section>
-            <h2>💡 Pro Tips & Tricks</h2>
+            <h2>💡 Pro Tips & Tricks (All Distros)</h2>
 
             <h3>Create Useful Aliases</h3>
             <p>Add to your <code>~/.bashrc</code> or <code>~/.zshrc</code>:</p>
@@ -894,8 +1128,9 @@ alias ll='ls -lh'
 # System info
 alias sysinfo='neofetch'
 
-# Update system
-alias update='sudo pacman -Syu && yay -Syu'
+# Update system (works on both Arch and Mint)
+alias archupdate='sudo pacman -Syu && yay -Syu'
+alias mintupdate='sudo apt update && sudo apt upgrade'
 
 # Find large files
 alias largef='find . -type f -size +100M'
@@ -904,8 +1139,11 @@ alias largef='find . -type f -size +100M'
 alias diskusage='du -sh * | sort -rh'</code></pre>
 
             <h3>Quick Package Search & Install</h3>
-            <pre><code># Find and install in one command (requires fzf)
-sudo pacman -S $(pacman -Ssq keyword | fzf --multi)</code></pre>
+            <pre><code># Find and install in one command (Arch)
+sudo pacman -S $(pacman -Ssq keyword | fzf --multi)
+
+# Find and install in one command (Mint)
+sudo apt install $(apt search keyword | grep -oP '^\K[^/]+' | fzf --multi)</code></pre>
 
             <h3>Real-time System Monitoring</h3>
             <pre><code># Watch disk usage
@@ -930,6 +1168,10 @@ watch -n 1 'cat /proc/net/dev'</code></pre>
                 <li><a href="https://archlinux.org/docs/" target="_blank" style="color: var(--primary-color);">Arch Linux Documentation</a></li>
                 <li><a href="https://man.archlinux.org/man/pacman.8" target="_blank" style="color: var(--primary-color);">Pacman Manual</a></li>
                 <li><a href="https://man.archlinux.org/man/systemd.1" target="_blank" style="color: var(--primary-color);">Systemd Manual</a></li>
+                <li><a href="https://www.steampowered.com/steamdeck/" target="_blank" style="color: var(--primary-color);">Steam Deck Official</a></li>
+                <li><a href="https://github.com/ValveSoftware/SteamOS" target="_blank" style="color: var(--primary-color);">SteamOS GitHub</a></li>
+                <li><a href="https://linuxmint.com/" target="_blank" style="color: var(--primary-color);">Linux Mint Official</a></li>
+                <li><a href="https://linuxmint.com/documentation.php" target="_blank" style="color: var(--primary-color);">Linux Mint Documentation</a></li>
                 <li><a href="https://github.com/bowenjoseph2014-hash/linux-commands" target="_blank" style="color: var(--primary-color);">GitHub Repository</a></li>
             </ul>
         </section>
@@ -937,8 +1179,8 @@ watch -n 1 'cat /proc/net/dev'</code></pre>
 
     <!-- Footer -->
     <footer>
-        <p>Linux Tips & Tricks - Arch Edition</p>
-        <p>A comprehensive guide to essential Linux and Arch commands</p>
+        <p>Linux Tips & Tricks - Multi-Distro Edition</p>
+        <p>A comprehensive guide to essential Linux commands across Arch, SteamOS, and Linux Mint</p>
         <p style="margin-top: 1.5rem; font-size: 0.9rem;">
             Created with 💚 by <a href="https://github.com/bowenjoseph2014-hash" target="_blank">@bowenjoseph2014-hash</a>
         </p>
